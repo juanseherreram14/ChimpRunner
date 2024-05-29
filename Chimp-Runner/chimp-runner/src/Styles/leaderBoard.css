@@ -1,0 +1,45 @@
+.container {
+    padding: 20px;
+  }
+  
+  .title {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  .subtitle {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  .leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  .leaderboard-table th,
+  .leaderboard-table td {
+    padding: 8px;
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .leaderboard-table th {
+    background-color: #f0f0f0;
+  }
+  
+  .claim-button {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+  
