@@ -10,9 +10,8 @@ const Formulario = () => {
     setUsername(event.target.value);
   };
 
-
   return (
-    <UserContext.Provider value={{ username, setUsername }}> {/* Envuelve todo con el proveedor de contexto */}
+    <UserContext.Provider value={{ username, setUsername }}>
       <div className="container">
         <h1>Ingresa tu @ de Insta</h1>
         <form>
@@ -22,12 +21,19 @@ const Formulario = () => {
             value={username}
             onChange={handleInputChange}
           />
-         
           <Link to={{ pathname: "/game", search: `?username=${username}` }}>
-              <button type="submit">Jugar Chimp Runner</button>
-        </Link>
-
+            <button type="submit">Jugar Chimp Runner</button>
+          </Link>
         </form>
+        <div className="instructions">
+          <h2>Instrucciones:</h2>
+          <ul>
+            <li>Toca la parte blanca de la pantalla para saltar</li>
+            <li>Entre más lejos llegues, tendrás un mejor puntaje</li>
+            <li>Logra el mejor puntaje semanal para reclamar tu premio</li>
+            <li>Buena suerte! Recuerda poner tu usuario de Instagram sin errores.</li>
+          </ul>
+        </div>
       </div>
     </UserContext.Provider>
   );
