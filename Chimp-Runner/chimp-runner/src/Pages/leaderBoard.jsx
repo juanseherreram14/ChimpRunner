@@ -32,13 +32,15 @@ function LeaderBoard() {
   useEffect(() => {
     const calculateTimeLeft = () => {
       const now = new Date();
-      const nextMonday = new Date();
-      nextMonday.setDate(now.getDate() + (1 + 7 - now.getDay()) % 7);
-      nextMonday.setHours(0, 0, 0, 0);
+      const dayOfWeek = now.getDay();
+      const diffToMonday = (dayOfWeek === 0 ? 6 : dayOfWeek - 1); // Calculate days to last Monday
+      const lastMonday = new Date(now);
+      lastMonday.setDate(now.getDate() - diffToMonday);
+      lastMonday.setHours(0, 0, 0, 0); // Start of Monday
 
-      const endOfWeek = new Date(nextMonday);
-      endOfWeek.setDate(nextMonday.getDate() + 6);
-      endOfWeek.setHours(23, 59, 59, 999);
+      const endOfWeek = new Date(lastMonday);
+      endOfWeek.setDate(lastMonday.getDate() + 6);
+      endOfWeek.setHours(23, 59, 59, 999); // End of Sunday
 
       const difference = endOfWeek - now;
 

@@ -74,13 +74,13 @@ function Dino() {
         clearInterval(isAlive); // Detener el intervalo
       } else {
         setScore((prevScore) => {
-          // Aumentar la velocidad de los obstáculos cada 50 puntos
           if (prevScore >= 1000 && prevScore % 50 === 0) {
-            setObstacleSpeed((prevSpeed) => prevSpeed - speedIncrement);
+            setObstacleSpeed((prevSpeed) => prevSpeed - 1);
           }
           return prevScore + 1;
         });
       }
+      
     }, obstacleSpeed);
   
     // Limpieza del intervalo al desmontar el componente
