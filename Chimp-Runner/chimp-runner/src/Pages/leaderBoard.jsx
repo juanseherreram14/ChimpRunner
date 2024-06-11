@@ -11,7 +11,7 @@ function LeaderBoard() {
       try {
         const db = getFirestore();
         const scoresCollection = collection(db, 'Usuarios');
-        const leaderboardQuery = query(scoresCollection, orderBy('score', 'desc'), limit(5));
+        const leaderboardQuery = query(scoresCollection, orderBy('score', 'desc'), limit(20));
         const snapshot = await getDocs(leaderboardQuery);
 
         const leaderboardData = snapshot.docs.map(doc => ({

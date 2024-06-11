@@ -46,7 +46,7 @@
     position: relative;
     top: 110px;
     left: 580px;
-    background-image: url("../Images/tree.PNG");
+    background-image: url("../Images/banana.PNG");
     background-size: 20px 40px;
     animation: block 1s infinite linear;
   }
