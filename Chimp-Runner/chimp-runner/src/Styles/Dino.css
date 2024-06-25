@@ -57,7 +57,7 @@
 .flying {
   width: 40px;
   height: 30px;
-  top: 60px;
+  top: 70px; /* Ajuste la posición ligeramente más alta */
   left: 580px;
   background-image: url("../Images/Volador.PNG");
   background-size: 40px 30px;
