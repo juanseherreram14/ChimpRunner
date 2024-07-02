@@ -33,7 +33,6 @@ function Dino() {
   const [isGameOver, setIsGameOver] = useState(false);
   const [obstacleAnimationStarted, setObstacleAnimationStarted] = useState(false);
   const [isJumping, setIsJumping] = useState(false);
-  const obstacleAnimationIntervalRef = useRef(null);
   const [currentObstacleType, setCurrentObstacleType] = useState('cactus'); // Tipo de obstáculo actual
 
   useEffect(() => {
@@ -83,26 +82,31 @@ function Dino() {
   }, [isJumping, currentObstacleType, isGameOver]);
 
   useEffect(() => {
+    let obstacleInterval;
+
     if (!isGameOver && obstacleAnimationStarted) {
-      const obstacleAnimationInterval = setInterval(() => {
+      obstacleInterval = setInterval(() => {
         if (obstacleRef.current) {
-          obstacleRef.current.classList.remove('flying', 'cactus'); // Remover clases existentes
+          const obstacleLeft = parseInt(getComputedStyle(obstacleRef.current).getPropertyValue('left'));
+          
+          // Generar un nuevo obstáculo solo si el obstáculo anterior ha salido completamente de la pantalla
+          if (obstacleLeft <= 0) {
+            obstacleRef.current.classList.remove('flying', 'cactus'); // Remover clases existentes
+
+            // Generar aleatoriamente el tipo de obstáculo
+            const newObstacleType = Math.random() < 0.5 ? 'flying' : 'cactus';
+            setCurrentObstacleType(newObstacleType);
+
+            // Asignar la clase al obstáculo actual
+            obstacleRef.current.classList.add(newObstacleType);
+          }
         }
-        
-        // Generar aleatoriamente el tipo de obstáculo
-        const newObstacleType = Math.random() < 0.5 ? 'flying' : 'cactus';
-        setCurrentObstacleType(newObstacleType);
-        
-        // Asignar la clase al obstáculo actual
-        if (obstacleRef.current) {
-          obstacleRef.current.classList.add(newObstacleType);
-        }
-      }, 2000); // Cambiar cada 2 segundos
-  
-      return () => {
-        clearInterval(obstacleAnimationInterval);
-      };
+      }, 50); // Revisar la posición del obstáculo frecuentemente
     }
+
+    return () => {
+      clearInterval(obstacleInterval);
+    };
   }, [isGameOver, obstacleAnimationStarted]);
 
   useEffect(() => {
@@ -115,9 +119,9 @@ function Dino() {
     const handleJump = () => {
       if (!isGameOver) jump();
     };
-  
+
     const isMobileDevice = /Mobi|Android/i.test(navigator.userAgent);
-  
+
     if (isMobileDevice) {
       document.addEventListener('touchstart', handleJump);
     } else {
@@ -127,7 +131,7 @@ function Dino() {
         }
       });
     }
-  
+
     return () => {
       document.removeEventListener('touchstart', handleJump);
       document.removeEventListener('keydown', handleJump);
@@ -152,7 +156,7 @@ function Dino() {
   // Incrementar la velocidad de los obstáculos basado en el puntaje
   useEffect(() => {
     if (!isGameOver) {
-      const newSpeed = 1 - Math.min(score / 1000, 0.9); // Incrementa la velocidad con el puntaje
+      const newSpeed = 1 - Math.min(score / 2000, 0.8); // Incrementa la velocidad con el puntaje de manera más gradual
       setObstacleSpeed(newSpeed);
     }
   }, [score, isGameOver]);
