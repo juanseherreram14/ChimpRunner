@@ -34,6 +34,8 @@ function Dino() {
   const [obstacleAnimationStarted, setObstacleAnimationStarted] = useState(false);
   const [isJumping, setIsJumping] = useState(false);
   const [currentObstacleType, setCurrentObstacleType] = useState('cactus'); // Tipo de obstáculo actual
+  const consecutiveFlyingObstacles = useRef(0); // Contador de obstáculos voladores consecutivos
+  const lastObstacleType = useRef(''); // Último tipo de obstáculo generado
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -80,30 +82,48 @@ function Dino() {
       clearInterval(isAlive);
     };
   }, [isJumping, currentObstacleType, isGameOver]);
-
   useEffect(() => {
     let obstacleInterval;
-
+  
     if (!isGameOver && obstacleAnimationStarted) {
       obstacleInterval = setInterval(() => {
         if (obstacleRef.current) {
           const obstacleLeft = parseInt(getComputedStyle(obstacleRef.current).getPropertyValue('left'));
-          
+  
           // Generar un nuevo obstáculo solo si el obstáculo anterior ha salido completamente de la pantalla
           if (obstacleLeft <= 0) {
             obstacleRef.current.classList.remove('flying', 'cactus'); // Remover clases existentes
-
-            // Generar aleatoriamente el tipo de obstáculo
-            const newObstacleType = Math.random() < 0.5 ? 'flying' : 'cactus';
+  
+            let newObstacleType;
+  
+            // Verificar y limitar los obstáculos voladores consecutivos
+            if (consecutiveFlyingObstacles.current >= 2) {
+              newObstacleType = 'cactus';
+              consecutiveFlyingObstacles.current = 0; // Resetear el contador
+            } else if (lastObstacleType.current === 'flying') {
+              newObstacleType = 'cactus';
+              consecutiveFlyingObstacles.current = 0;
+            } else {
+              // Generar aleatoriamente el tipo de obstáculo
+              const isFlying = Math.random() < 0.5;
+              newObstacleType = isFlying ? 'flying' : 'cactus';
+              if (isFlying) {
+                consecutiveFlyingObstacles.current += 1;
+              } else {
+                consecutiveFlyingObstacles.current = 0;
+              }
+            }
+  
             setCurrentObstacleType(newObstacleType);
-
+            lastObstacleType.current = newObstacleType;
+  
             // Asignar la clase al obstáculo actual
             obstacleRef.current.classList.add(newObstacleType);
           }
         }
-      }, 50); // Revisar la posición del obstáculo frecuentemente
+      }, 2000); // Ajusta el intervalo según sea necesario
     }
-
+  
     return () => {
       clearInterval(obstacleInterval);
     };
